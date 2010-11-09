@@ -1,8 +1,9 @@
 var fs = require('fs'),
-	jsp = require('uglifyjs/parse-js'),
+	uglify = require('uglify-js'),
+	jsp = uglify.parser,
 	nodeunit = require('nodeunit'),
 	path = require('path'),
-	pro = require('uglifyjs/process');
+	pro = uglify.uglify;
 
 var Script = process.binding('evals').Script;
 
@@ -11,7 +12,7 @@ var scriptsPath = __dirname;
 function compress(code) {
 	var ast = jsp.parse(code);
 	ast = pro.ast_mangle(ast);
-	ast = pro.ast_squeeze(ast);
+	ast = pro.ast_squeeze(ast, {no_warnings: true});
 	return pro.gen_code(ast);
 }
 
